@@ -1,27 +1,28 @@
 import java.util.Scanner;
 
-public class Main {
-    public static void main(String[] args) {
+public class cafeteria {
+
+    public static void main(String args[]) {
         Scanner input = new Scanner(System.in);
 
         // Item prices
-        int hotdogPrice = 15;
-        int siomaiPrice = 20;
-        int waterPrice = 10;
+        int hotdog = 15;
+        int siomai = 12;
+        int water = 10;
 
         // Quantities for each item
-        int hotdogQty = 0;
-        int siomaiQty = 0;
-        int waterQty = 0;
+        int hotdogquant = 0;
+        int siomaiquant = 0;
+        int waterquant = 0;
 
         System.out.println("CAFETERIA MENU:");
         System.out.println("[1] Hotdog - P15");
-        System.out.println("[2] Siomai - P20");
+        System.out.println("[2] Siomai - P12");
         System.out.println("[3] Water  - P10");
 
-        String addMore = "yes";
+        String add = "yes";
 
-        while (addMore.equals("yes")) {
+        while (add.equals("yes")) {
             int choice = 0;
 
             // Ask for item choice
@@ -38,54 +39,64 @@ public class Main {
                 }
             }
 
-            // Ask for quantity and add to the correct item
-            System.out.print("Enter quantity: ");
-            int qty = input.nextInt();
-
+            // Ask for quantity and validate input
+            int quantity = 0;
+            while (quantity <= 0) {
+                System.out.print("Enter quantity: ");
+                if (input.hasNextInt()) {
+                    quantity = input.nextInt();
+                    if (quantity <= 0) {
+                        System.out.println("Quantity cannot be negative.");
+                    }
+                } else {
+                    System.out.println("Invalid input. Please enter a valid number.");
+                    input.next(); // clear invalid input
+                }
+            }
+            // Add to correct item
             if (choice == 1) {
-                hotdogQty += qty;
+                hotdogquant += quantity;
             } else if (choice == 2) {
-                siomaiQty += qty;
+                siomaiquant += quantity;
             } else if (choice == 3) {
-                waterQty += qty;
+                waterquant += quantity;
             }
 
-            input.nextLine(); // clear buffer
+            input.nextLine(); // consume newline
 
             // Ask if user wants to add more items
-            addMore = "";
-            while (!addMore.equals("yes") && !addMore.equals("no")) {
+            add = "";
+            while (!add.equals("yes") && !add.equals("no")) {
                 System.out.print("Do you want to add more items? (yes/no): ");
-                addMore = input.nextLine().trim().toLowerCase();
-                if (!addMore.equals("yes") && !addMore.equals("no")) {
+                add = input.nextLine().trim().toLowerCase();
+                if (!add.equals("yes") && !add.equals("no")) {
                     System.out.println("Invalid input. Please type 'yes' or 'no'.");
                 }
             }
         }
-
         // Calculate and display order summary
         int total = 0;
         System.out.println("\n--- ORDER SUMMARY ---");
-        if (hotdogQty > 0) {
-            int hotdogTotal = hotdogQty * hotdogPrice;
-            total += hotdogTotal;
-            System.out.println("Hotdog x " + hotdogQty + " = P" + hotdogTotal);
+        if (hotdogquant > 0) {
+            int hotdogtotal = hotdogquant * hotdog;
+            total += hotdogtotal;
+            System.out.println("Hotdog x " + hotdogquant + " = P" + hotdogtotal);
         }
-        if (siomaiQty > 0) {
-            int siomaiTotal = siomaiQty * siomaiPrice;
-            total += siomaiTotal;
-            System.out.println("Siomai x " + siomaiQty + " = P" + siomaiTotal);
+        if (siomaiquant > 0) {
+            int siomaitotal = siomaiquant * siomai;
+            total += siomaitotal;
+            System.out.println("Siomai x " + siomaiquant + " = P" + siomaitotal);
         }
-        if (waterQty > 0) {
-            int waterTotal = waterQty * waterPrice;
-            total += waterTotal;
-            System.out.println("Water x " + waterQty + " = P" + waterTotal);
+        if (waterquant > 0) {
+            int watertotal = waterquant * water;
+            total += watertotal;
+            System.out.println("Water x " + waterquant + " = P" + watertotal);
         }
 
         System.out.println("Total: P" + total);
-
+        
         // Ask for cash until it's enough
-        int cash = -1;
+        int cash = 0;
         while (cash < total) {
             System.out.print("Enter your cash: ");
             if (input.hasNextInt()) {
@@ -98,9 +109,8 @@ public class Main {
                 input.next(); // clear invalid input
             }
         }
-
         int change = cash - total;
-        System.out.println("Change: P" + change);
+        System.out.printf("Change: P" + change);
         System.out.println("Thank you for your order!");
     }
 }
